@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "es6",
+    "moduleResolution": "node",
+    "lib": ["ES2019", "DOM"],
+    "strict": true,
+    "types": ["jest"],
+    "outDir": "dist",
+    "esModuleInterop": true,
+  },
+  "include": ["src/**/*.ts", "src/index.tsx"]
+}
