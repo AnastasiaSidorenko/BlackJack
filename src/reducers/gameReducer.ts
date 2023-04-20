@@ -1,13 +1,11 @@
-import { BingoAction, BingoState, BingoTicket } from "../types";
+import { GameAction, GameState, BingoTicket } from "../types";
 import { isEqual, uniq } from "lodash";
 
-const initialState: BingoState = {
-    /* players: [],
-    numbersDrawn: [],
-    winners: [],
-    availableNumbersToDraw: Array.from({length: 75}, (_, i) => i + 1) */
+const initialState: GameState = {
+    name: "Pavel"
 };
-export function gameReducer(state = initialState, action: BingoAction): BingoState {
+
+export function gameReducer(state = initialState, action: GameAction): GameState {
     switch(action.type) {
 
         case "registered":

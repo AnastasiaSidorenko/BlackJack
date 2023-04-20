@@ -14,13 +14,17 @@ export type BingoTicket = [
     [NumberIn1stCol, NumberIn2ndCol, NumberIn3rdCol, NumberIn4thCol, NumberIn5thCol],
 ]
 
-export type BingoAction =
+export type GameAction =
     | { type: "registered", payload: { name: string, ticket: BingoTicket } }
     | { type: "numberDrawn", payload: BingoNumber }
 
-export interface BingoState {
+/* export interface BingoState {
     readonly players: Readonly<Array<{ name: string, ticket: BingoTicket }>>;
     readonly numbersDrawn: readonly number[];
     readonly winners: readonly string[];
     availableNumbersToDraw?: number[]
+} */
+
+export interface GameState {
+    name: string;
 }

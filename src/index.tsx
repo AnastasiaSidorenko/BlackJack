@@ -1,5 +1,6 @@
-import { createStore } from "redux";
-import { Provider } from "react-redux";
+import * as React from "react";
+import { AnyAction, createStore, Store } from "redux";
+import { Provider, ReactReduxContextValue, useSelector } from "react-redux";
 import { composeWithDevTools } from 'redux-devtools-extension';
 
 import { Stage as PixiStage } from '@pixi/react';
@@ -7,9 +8,18 @@ import { ReactReduxContext } from 'react-redux';
 import { gameReducer } from './reducers/gameReducer';
 
 import { createRoot } from "react-dom/client";
+import { values } from "lodash";
+import { GameAction, GameState } from "./types";
+
+interface ContextBridgeProps {
+    value: Store<GameState, GameAction>
+    Context: React.Context<ReactReduxContextValue<any, AnyAction>>;
+    children: React.ReactNode;
+    render: any
+}
 
 // the context bridge:
-const ContextBridge = ({ children, Context, render }) => {
+const ContextBridge:React.FC <ContextBridgeProps> = ({ children, Context, render }) => {
   return (
     <Context.Consumer>
       {(value) =>
@@ -19,26 +29,37 @@ const ContextBridge = ({ children, Context, render }) => {
   );
 };
 
-// your Stage:
+const store = createStore(gameReducer, composeWithDevTools());
 
-export const Stage = ({ children, ...props }) => {
+// your Stage:
+interface StageProps {
+    children: React.ReactNode;
+}
+
+export const Stage:React.FC <StageProps> = ({ children, ...props }) => {
   return (
     <ContextBridge
       Context={ReactReduxContext}
-      render={(children) => <PixiStage {...props}>{children}</PixiStage>}
+      value={store}
+      render={(children: React.ReactNode) => <PixiStage {...props}>{children}</PixiStage>}
     >
       {children}
     </ContextBridge>
   );
 };
 
-const store = createStore(gameReducer, composeWithDevTools());
+const Table = () => {
+    const name = useSelector((state: GameState) => state.name);
+    return (
+        <div>Table: {name}</div>
+    )
+}
 
 // your App
 function App() {
     return (
-        <Stage value={store}>
-            <div>TABLE</div>
+        <Stage>
+            <Table />
         </Stage>
     )
 }
