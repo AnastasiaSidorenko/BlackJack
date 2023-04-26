@@ -1,5 +1,7 @@
 import { Container, Graphics, SimpleMesh, Sprite, Stage } from "@pixi/react";
 import React, { useCallback, useEffect, useState } from "react";
+import { Overlay } from './overlay-components/index';
+import { SizeProps } from '../types';
 
 // const { uvs, vertices, indices } = makeSimpleMeshData();
 
@@ -16,14 +18,6 @@ const BackGround:React.FC<SizeProps> = ({width, height}) => {
 };
 
 export const Table:React.FC<SizeProps> = ({ width, height }) => {
-    console.log("here");
-    console.log("width", width);
-    console.log("height", height);
-
-    /* useEffect(() => {
-        draw();
-    }, [width, height]) */
-
     const drawOuter = useCallback((g: any) => {
         g.clear();
         g.moveTo(0, 0);
@@ -56,38 +50,14 @@ export const Table:React.FC<SizeProps> = ({ width, height }) => {
     );
 }
 
-interface SizeProps {
-    width: number;
-    height: number;
-}
-
 export const Game:React.FC<SizeProps> = ({ ...props }) => {
-    /* const [width, setWidth] = useState<number>();
-    const [height, setHeight] = useState<number>()
-
-    useEffect(() => {
-        console.log("window", window.innerWidth);
-        window.addEventListener('resize', handleResize);
-        handleResize();
-    }, []);
-
-    const handleResize = () => {
-        setWidth(window.innerWidth);
-        setHeight(window.innerHeight);
-    }; */
-
-    /* <Sprite
-                image={'./assets/table.png'}
-                x={0}
-                y={- window.innerHeight}
-                width={window.innerWidth}
-                height={window.innerHeight * 2}
-            /> */
 
   return (
         <Container>
             <BackGround {...props }/>
             <Table {...props} />
+            <Overlay {...props}  />
+            { /* <Players /> */}
         </Container>
   );
 };

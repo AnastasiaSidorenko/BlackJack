@@ -9,7 +9,6 @@ import { gameReducer } from './reducers/gameReducer';
 
 import { createRoot } from "react-dom/client";
 import { values } from "lodash";
-import { GameAction, GameState } from "./types";
 import { StrictMode } from "react";
 import { Game } from './components/game';
 import './index.css';
@@ -53,8 +52,8 @@ export const Stage:React.FC <StageProps> = ({ children, ...props }) => {
 
 const Table = () => {
     console.log("HERE");
-    const name = useSelector((state: GameState) => state.name);
-    console.log({name});
+    // const name = useSelector((state: GameState) => state.name);
+    // console.log({name});
     return null;
     /* return (
         <div>Table: {name}</div>
