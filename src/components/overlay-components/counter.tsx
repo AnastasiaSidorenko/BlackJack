@@ -1,15 +1,17 @@
 import { Container, Graphics, Text } from "@pixi/react";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { SizeProps, ActionTypes } from "../../types";
+import { SizeProps, ActionTypes, PositionProps } from "../../types";
 import { TextStyle } from 'pixi.js';
 
 interface CounterProps {
     onTimeUp?: () => void;
     seconds: number;
+    preTimeUpSeconds?: number;
+    onPretimeUp?: () => void;
 }
 
-export const Counter:React.FC<SizeProps & CounterProps> = ({width, height, seconds, onTimeUp}) => {
+export const Counter:React.FC<CounterProps & PositionProps> = ({position, seconds, onTimeUp, preTimeUpSeconds, onPretimeUp}) => {
     const [ count, setCount ] = useState(seconds);
 
     const draw = useCallback((g: any) => {
@@ -20,20 +22,26 @@ export const Counter:React.FC<SizeProps & CounterProps> = ({width, height, secon
     }, []);
 
     const counterValid = count > 0;
+    const preTimeUp = count === preTimeUpSeconds;
+
     useEffect(() => {
         if (!counterValid && onTimeUp) onTimeUp();
         const interval = setInterval(() => {
             console.log("here", count);
-            if (count > 0) {
-                setCount(prev => prev - 1);
-            }
+            setCount(prev => prev - 1);
         }, 1000);
 
         return () => clearInterval(interval);
     }, [counterValid]);
 
+    useEffect(() => {
+        if (preTimeUp && onPretimeUp) onPretimeUp();
+    }, [preTimeUp]);
+
     return (
-        <Container position={{x: width/2, y: height/2}} anchor={0.5}>
+        counterValid
+        ?
+        <Container position={position} anchor={0.5}>
             <Graphics draw={draw} />
             <Text text={count.toString()} style={
                 new TextStyle({
@@ -44,5 +52,6 @@ export const Counter:React.FC<SizeProps & CounterProps> = ({width, height, secon
                 anchor={0.5}
             />
         </Container>
+        : null
     )
 }

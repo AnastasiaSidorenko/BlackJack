@@ -1,27 +1,26 @@
 import { Card_Deck, Suit, SuitEnum, CardValue, Card } from './types';
 
 export function getCardDeck():Card_Deck  {
-    const cardDeck: Card_Deck = [];
+    let cardDeck: Card_Deck = [];
     Object.values(SuitEnum).forEach(suit => {
-        for (let i = 0; i++; i <= 13) {
+        for(let i = 1; i <= 13; i++) {
             cardDeck.push({
                 suit: suit,
                 value: i as CardValue
-            })
+            });
         }
     });
-
-    console.log({cardDeck});
-    console.log("shuffleArray(cardDeck)", shuffleArray(cardDeck));
+    console.log("cardDeck", cardDeck);
     return shuffleArray(cardDeck);
 }
 
 function shuffleArray(array:Card_Deck) {
+    console.log("shuffleArray", array);
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
-    return array
+    return array;
 }
 
 function getSum(total:number, card: Card):number {
@@ -41,4 +40,8 @@ export function calcPoints(cards: Card[]) {
         }
     }
     return pointsResult;
+}
+
+export function calcGameOutcome() {
+
 }

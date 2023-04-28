@@ -10,7 +10,9 @@ export enum ActionTypes {
     SURRENDER = "surrender",
     INIT = "INIT",
     DOUBLE = "double",
-    TOSS = "toss"
+    DEALING = "dealing",
+    REVEAL = "reveal",
+    PASS_FURTHER = "pass further"
 }
 
 export type GameAction =
@@ -22,7 +24,9 @@ export type GameAction =
     | { type: ActionTypes.SURRENDER }
     | { type: ActionTypes.INIT }
     | { type: ActionTypes.DOUBLE }
-    | { type: ActionTypes.TOSS }
+    | { type: ActionTypes.DEALING }
+    | { type: ActionTypes.REVEAL }
+    | { type: ActionTypes.PASS_FURTHER }
 
 export type Suit = 'club' | 'diamond' | 'heart' | 'spade';
 export type CardValue = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13;
@@ -40,15 +44,18 @@ export enum SuitEnum {
 
 export type Card_Deck = Card[];
 
+export type Seat = {
+    id: number;
+    card_points: number;
+    cards: Card[];
+    bet: number;
+};
+
 type Player = {
     id: string,
     total_balance: number;
     total_bet: number;
-    seats: {
-        id: number;
-        card_points: number;
-        cards: Card[];
-    }[];
+    seats: Seat[];
 };
 
 
@@ -57,7 +64,14 @@ export enum GameStatus {
     STARTED,
     ENDED,
     WAITING_BETS,
-    WAITING
+    WAITING,
+    DEALING,
+    REVEAL
+}
+
+export enum GameResult { 
+    DEFEAT,
+    WIN
 }
 
 export interface GameState {
@@ -69,6 +83,10 @@ export interface GameState {
     dealer: {
         cards: Card[];
         card_points: number;
+    },
+    result: {
+        status: GameResult | null,
+        value: number
     }
     // taken_seats: number[];
 }

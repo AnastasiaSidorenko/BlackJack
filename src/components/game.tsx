@@ -1,7 +1,10 @@
 import { Container, Graphics, SimpleMesh, Sprite, Stage } from "@pixi/react";
 import React, { useCallback, useEffect, useState } from "react";
 import { Overlay } from './overlay-components/index';
-import { SizeProps } from '../types';
+import { GameState, GameStatus, SizeProps } from '../types';
+import { useSelector } from "react-redux";
+import { CardPlacers } from './card-placer';
+import { InfoPanel } from './info-panel/index';
 
 // const { uvs, vertices, indices } = makeSimpleMeshData();
 
@@ -51,13 +54,18 @@ export const Table:React.FC<SizeProps> = ({ width, height }) => {
 }
 
 export const Game:React.FC<SizeProps> = ({ ...props }) => {
-
-  return (
+    const status = useSelector((state: GameState) => state.status);
+    return (
         <Container>
             <BackGround {...props }/>
             <Table {...props} />
             <Overlay {...props}  />
-            { /* <Players /> */}
+            { [GameStatus.STARTED, GameStatus.DEALING, GameStatus.WAITING].includes(status) &&
+               <CardPlacers />  
+            }
+            <InfoPanel {...props} />
+            {/* TODO make balance and bet display*/}
+            {/* TODO balance localStorage */}
         </Container>
   );
 };

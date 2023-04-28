@@ -1,7 +1,10 @@
-import { Sprite } from '@pixi/react';
+import React, { useCallback, useEffect } from 'react';
+import { Container, Sprite, withFilters } from '@pixi/react';
+import { Filter, filters } from 'pixi.js';
+import {DropShadowFilter} from '@pixi/filter-drop-shadow';
+import { PositionProps } from '../../types';
 
 interface CoinProps {
-    position: [number, number],
     bet: number,
     isSelected: boolean,
     onSelect: (bet: number) => void
@@ -9,14 +12,18 @@ interface CoinProps {
 
 const path = '../../assets/Coins/';
 
-// if selected then show shadow (подсветка)
+const filter = new DropShadowFilter();
+filter.color = 0xffffff
 
-const Coin:React.FC<CoinProps> = ({bet, position}) => (
-    <Sprite
-        image={`${path}${bet}.png`}
-        position={position}
-        roundPixels={true}
-        // filters={[blurFilter, matrixFilter]}
-        // подсветка если selected
-    />
-);
+export const Coin:React.FC<CoinProps & PositionProps> = ({bet, position, isSelected, onSelect}) => {
+    return (
+        <Sprite
+            image={`${path}${bet}.png`}
+            position={position || {x: 0, y:0}}
+            scale={0.5}
+            interactive
+            onclick={() => onSelect(bet)}
+            anchor={0.5}
+        />
+    )
+};

@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@pixi/filter-drop-shadow": "^5.2.0",
     "@pixi/react": "^7.0.3",
     "@pixi/react-animated": "^7.0.3",
     "@types/jest": "^29.5.0",

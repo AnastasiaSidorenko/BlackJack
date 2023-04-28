@@ -50,16 +50,6 @@ export const Stage:React.FC <StageProps> = ({ children, ...props }) => {
   );
 };
 
-const Table = () => {
-    console.log("HERE");
-    // const name = useSelector((state: GameState) => state.name);
-    // console.log({name});
-    return null;
-    /* return (
-        <div>Table: {name}</div>
-    ) */
-}
-
 // your App
 function App() {
     const [width, setWidth] = React.useState<number>(0);
@@ -76,6 +66,7 @@ function App() {
       setWidth(document.body.clientWidth);
       setHeight(window.innerHeight);
     };
+    /* TODO remake width height params */
 
     return (
       <StrictMode>

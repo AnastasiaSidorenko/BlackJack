@@ -23,10 +23,11 @@ export const Loaded:React.FC<SizeProps> = ({width, height}) => {
             type: ActionTypes.INIT
         });
     }
-    //x={20} y={20}
+
+    // position={{x: width/2, y: height/2}} anchor={0.5}
 
     return (
-        <Container pointerdown={onClick} position={{x: width/2, y: height/2}} anchor={0.5} interactive>
+        <Container pointerdown={onClick} anchor={0.5} interactive>
             <Graphics draw={draw}/>
             <Text text="READY" style={
                 new TextStyle({
