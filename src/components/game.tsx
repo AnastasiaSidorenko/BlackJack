@@ -7,6 +7,7 @@ import { CardPlacers } from './card-placer';
 import { InfoPanel } from './info-panel/index';
 
 // const { uvs, vertices, indices } = makeSimpleMeshData();
+export const tablePadding = 40;
 
 const BackGround:React.FC<SizeProps> = ({width, height}) => {
     return (
@@ -32,16 +33,15 @@ export const Table:React.FC<SizeProps> = ({ width, height }) => {
         g.endFill();
     }, [width, height]);
 
-    const padding = 40;
 
     const drawInner = useCallback((g: any) => {
         g.clear();
-        g.moveTo(padding, 0);
+        g.moveTo(tablePadding, 0);
         g.beginFill(0x095525);
-        g.lineTo(padding, height / 2);
-        g.bezierCurveTo(padding, height, width - padding, height, width - padding, height / 2);
-        g.lineTo(width - padding, 0);
-        g.lineTo(padding, 0);
+        g.lineTo(tablePadding, height / 2);
+        g.bezierCurveTo(tablePadding, height, width - tablePadding, height, width - tablePadding, height / 2);
+        g.lineTo(width - tablePadding, 0);
+        g.lineTo(tablePadding, 0);
         g.endFill();
     }, [width, height]);
 
@@ -60,8 +60,8 @@ export const Game:React.FC<SizeProps> = ({ ...props }) => {
             <BackGround {...props }/>
             <Table {...props} />
             <Overlay {...props}  />
-            { [GameStatus.STARTED, GameStatus.DEALING, GameStatus.WAITING].includes(status) &&
-               <CardPlacers />  
+            { ![GameStatus.LOADED, GameStatus.WAITING_BETS].includes(status) &&
+               <CardPlacers {...props} />  
             }
             <InfoPanel {...props} />
             {/* TODO make balance and bet display*/}

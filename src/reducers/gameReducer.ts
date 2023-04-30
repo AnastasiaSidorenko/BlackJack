@@ -1,8 +1,9 @@
 import { GameAction, GameState } from "../types";
 import { isEqual, reduce, uniq } from "lodash";
 import { Card, ActionTypes, GameStatus } from '../types';
-import { getCardDeck, calcPoints } from '../utils';
+import { getCardDeck, calcPoints, calcDealerShownPoints } from '../utils';
 import { Game } from "../components/game";
+import { DealerCardPlacer } from "../components/card-placer";
 
 const initialState: GameState = {
     availableCardsToDraw: getCardDeck(),
@@ -29,6 +30,7 @@ const initialState: GameState = {
     total_seats: 1,
     // status: GameStatus.LOADED
     status: GameStatus.DEALING
+    // status: GameStatus.WAITING
 };
 
 // calc winning bet
@@ -47,10 +49,22 @@ export function gameReducer(state = initialState, action: GameAction): GameState
         case ActionTypes.PLACE_BET:
             const { value } = action.payload;
             const newSeatsInfo = [...state.player.seats];
+            const allCards = [...state.availableCardsToDraw];
+            const drawnCards = allCards.slice(-4);
+            console.log("allCards", allCards);
+            console.log("drawnCards", drawnCards);
+            const playerCards = [drawnCards[0], drawnCards[1]];
+            const dealerCards = [drawnCards[2], drawnCards[3]];
+            drawnCards.length = drawnCards.length - 4;
+            console.log("drawnCards", drawnCards);
+
             newSeatsInfo[0] = {
                 ...newSeatsInfo[0],
-                bet: value
+                bet: value,
+                cards: playerCards,
+                card_points: calcPoints(playerCards)
             };
+
             return {
                 ...state,
                 player: {
@@ -58,6 +72,11 @@ export function gameReducer(state = initialState, action: GameAction): GameState
                     total_balance: state.player.total_balance = value,
                     total_bet: state.player.total_bet + value,
                     seats: newSeatsInfo
+                },
+                dealer: {
+                    ...state.dealer,
+                    cards: dealerCards,
+                    card_points: calcDealerShownPoints(dealerCards[0])
                 },
                 status: GameStatus.DEALING
             };
@@ -67,12 +86,14 @@ export function gameReducer(state = initialState, action: GameAction): GameState
         break;
 
         case ActionTypes.HIT:
-            const { card } = action.payload;
+            // const { card } = action.payload;
             // TODO get card from availableCards
             // TODO determine what
+            const availableCards = [...state.availableCardsToDraw];
+            const newCard = availableCards.pop();
             const newSeats = state.player.seats;
             const currentCards = newSeats[0].cards;
-            const newCards = [...currentCards, card];
+            const newCards = [...currentCards, newCard] as Card[];
             newSeats[0] = {
                 ...newSeats[0],
                 cards: newCards,
@@ -80,6 +101,7 @@ export function gameReducer(state = initialState, action: GameAction): GameState
             };
             return {
                 ...state,
+                availableCardsToDraw: availableCards,
                 player: {
                     ...state.player,
                     seats: newSeats
@@ -94,7 +116,7 @@ export function gameReducer(state = initialState, action: GameAction): GameState
         // не брать карты
             return {
                 ...state,
-                status: GameStatus.STARTED
+                status: GameStatus.REVEAL
             }
         break;
 
@@ -132,6 +154,13 @@ export function gameReducer(state = initialState, action: GameAction): GameState
             // find another seat if 2 -> 1
             // make active
         break;
+
+        case ActionTypes.WAIT_FOR_MOVE:
+            return {
+                ...state,
+                status: GameStatus.WAITING
+            }
+        break
 
         case ActionTypes.REVEAL:
             // calc win

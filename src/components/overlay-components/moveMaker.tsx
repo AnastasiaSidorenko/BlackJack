@@ -23,7 +23,7 @@ const defaultBet = 5;
 
 
 // SizeProps & 
-export const BetSelector:React.FC<{seconds: number}> = ({seconds}) => {
+export const MoveMaker:React.FC<{seconds: number}> = ({seconds}) => {
     // const balance = useSelector((state: GameState) => state.player.total_balance);
 
     const [ title, setTitle ] = useState('Make your decision');
@@ -60,7 +60,7 @@ export const BetSelector:React.FC<{seconds: number}> = ({seconds}) => {
     return (
         <Container anchor={0.5} >
             <InfoText position={{x: 0, y: -offset}} title={title} />
-            <Container anchor={0.5} position={{x: 0, y: offset}}>
+            <Container anchor={0.5} position={{x: 0, y: 0}}>
                 <Button
                     text="HIT"
                     onClick={handleHit}
@@ -77,7 +77,7 @@ export const BetSelector:React.FC<{seconds: number}> = ({seconds}) => {
                 />
             </Container>
             <Counter
-                position={{x: 0, y: offset * 2}}
+                position={{x: 0, y: -offset * 2}}
                 seconds={20}
                 onTimeUp={handleTimeUp}
             />
@@ -110,7 +110,7 @@ const Button:React.FC<ButtonProps & PositionProps> = ({onClick, color, text, pos
                     align: 'center',
                     fontFamily: '"Source Sans Pro", Helvetica, sans-serif',
                     fill: ['#ffffff'], // gradient,
-                    fontSize: 30
+                    fontSize: 50
                 })}
                 anchor={0.5}
             />
@@ -121,7 +121,7 @@ const Button:React.FC<ButtonProps & PositionProps> = ({onClick, color, text, pos
                     fill: ['#ffffff'], // gradient,
                     fontSize: 14
                 })}
-                position={{ x: 0, y: 40}}
+                position={{ x: 0, y: 40}} anchor={0.5}
             />
         </Container>
     )

@@ -12,7 +12,8 @@ export enum ActionTypes {
     DOUBLE = "double",
     DEALING = "dealing",
     REVEAL = "reveal",
-    PASS_FURTHER = "pass further"
+    PASS_FURTHER = "pass further",
+    WAIT_FOR_MOVE = "wait for move"
 }
 
 export type GameAction =
@@ -25,6 +26,7 @@ export type GameAction =
     | { type: ActionTypes.INIT }
     | { type: ActionTypes.DOUBLE }
     | { type: ActionTypes.DEALING }
+    | { type: ActionTypes.WAIT_FOR_MOVE }
     | { type: ActionTypes.REVEAL }
     | { type: ActionTypes.PASS_FURTHER }
 
@@ -58,6 +60,9 @@ type Player = {
     seats: Seat[];
 };
 
+export type PositionType = {
+    x: number, y: number
+}
 
 export enum GameStatus {
     LOADED,

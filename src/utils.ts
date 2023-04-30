@@ -42,6 +42,13 @@ export function calcPoints(cards: Card[]) {
     return pointsResult;
 }
 
+export function calcDealerShownPoints(card: Card) {
+    const { value } = card;
+    if (value === 1) return 11;
+    if ([11, 12, 13].includes(value)) return 10;
+    return value;
+}
+
 export function calcGameOutcome() {
 
 }

@@ -1,9 +1,9 @@
 import * as React from "react";
-import { AnyAction, createStore, Store } from "redux";
+import { AnyAction, applyMiddleware, createStore, Store } from "redux";
 import { Provider, ReactReduxContextValue, useSelector } from "react-redux";
 import { composeWithDevTools } from 'redux-devtools-extension';
 
-import { Stage as PixiStage } from '@pixi/react';
+import { Stage as PixiStage, useTick } from '@pixi/react';
 import { ReactReduxContext } from 'react-redux';
 import { gameReducer } from './reducers/gameReducer';
 
@@ -12,6 +12,10 @@ import { values } from "lodash";
 import { StrictMode } from "react";
 import { Game } from './components/game';
 import './index.css';
+import thunk from 'redux-thunk';
+import * as PIXI from 'pixi.js';
+
+export const betSelectingSeconds = 5;
 interface ContextBridgeProps {
     // value: Store<GameState, GameAction>
     Context: React.Context<ReactReduxContextValue<any, AnyAction>>;

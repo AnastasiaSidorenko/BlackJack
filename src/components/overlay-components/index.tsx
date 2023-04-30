@@ -7,6 +7,7 @@ import { Counter } from './counter';
 import { BetSelector } from './bets';
 import { offset } from './bets';
 import { InfoText } from './infoText';
+import { MoveMaker } from './moveMaker';
 import { Game } from '../game';
  
 export const Overlay:React.FC<SizeProps> = ({...props}) => {
@@ -20,7 +21,7 @@ export const Overlay:React.FC<SizeProps> = ({...props}) => {
                 <Loaded {...props}/>
             }
             { status === GameStatus.WAITING_BETS && 
-                <BetSelector seconds={5} />
+                <BetSelector />
             }
             { status === GameStatus.STARTED &&
                 <Counter seconds={3} position={{x: 0, y: 0}} />
@@ -29,7 +30,7 @@ export const Overlay:React.FC<SizeProps> = ({...props}) => {
                 <InfoText title={'bets accepted'} position={textPosition} />
             }
             { status === GameStatus.WAITING && 
-                
+                <MoveMaker seconds={15} />
             }
             { status === GameStatus.REVEAL && 
                 // setTimeout 

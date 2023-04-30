@@ -8,6 +8,7 @@ import { Counter } from "./counter";
 import { DropShadowFilter } from "@pixi/filter-drop-shadow";
 import { update } from "lodash";
 import { InfoText } from './infoText';
+import { betSelectingSeconds } from '../../index';
 
 const bets = [1, 5, 10, 25, 100, 500];
 
@@ -23,7 +24,7 @@ const defaultBet = 5;
 
 
 // SizeProps & 
-export const BetSelector:React.FC<{seconds: number}> = ({seconds}) => {
+export const BetSelector:React.FC = () => {
     const balance = useSelector((state: GameState) => state.player.total_balance);
 
     const [ title, setTitle ] = useState('Place your bets');
@@ -151,7 +152,7 @@ export const BetSelector:React.FC<{seconds: number}> = ({seconds}) => {
             </Container>
             <Counter
                 position={{x: 0, y: offset * 2}}
-                seconds={20}
+                seconds={betSelectingSeconds}
                 onTimeUp={handleTimeUp}
                 preTimeUpSeconds={5}
                 onPretimeUp={handleBetsClosing}
