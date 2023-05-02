@@ -1,19 +1,25 @@
-import { ActionTypes, GameResult, GameState, GameStatus, SizeProps } from '../../types';
-import { Provider, ReactReduxContextValue, useDispatch, useSelector } from "react-redux";
-import { Container, Graphics } from '@pixi/react';
-import React, { useCallback } from 'react';
+import { ActionTypes, GameState, GameStatus, SizeProps } from '../../types';
+import { useDispatch, useSelector } from "react-redux";
+import { Container } from '@pixi/react';
+import React from 'react';
 import { Loaded } from './loaded';
 import { Counter } from './counter';
 import { BetSelector } from './bets';
 import { offset } from './bets';
 import { InfoText } from './infoText';
 import { MoveMaker } from './moveMaker';
-import { Game } from '../game';
+import { RevealResult } from './reveal';
  
 export const Overlay:React.FC<SizeProps> = ({...props}) => {
+    const dispatch = useDispatch();
     const status = useSelector((state: GameState) => state.status);
-    const result = useSelector((state: GameState) => state.result);
     const textPosition={x: 0, y: -offset};
+
+    const handleStartDealing = () => {
+        dispatch({
+            type: ActionTypes.DEALING
+        });
+    }
 
     return (
         <Container position={{x: props.width/2, y: props.height/2}} anchor={0.5}>
@@ -21,23 +27,20 @@ export const Overlay:React.FC<SizeProps> = ({...props}) => {
                 <Loaded {...props}/>
             }
             { status === GameStatus.WAITING_BETS && 
-                <BetSelector />
+                <BetSelector seconds={5} />
             }
             { status === GameStatus.STARTED &&
-                <Counter seconds={3} position={{x: 0, y: 0}} />
-            }
-            {  [GameStatus.STARTED].includes(status) &&
-                <InfoText title={'bets accepted'} position={textPosition} />
+                <>
+                    <InfoText title={'bets accepted'} position={textPosition} />
+                    <Counter seconds={3} position={{x: 0, y: 0}} onTimeUp={handleStartDealing} />
+                </>
             }
             { status === GameStatus.WAITING && 
                 <MoveMaker seconds={15} />
             }
-            { status === GameStatus.REVEAL && 
+            { status === GameStatus.ENDED && 
                 // setTimeout 
-                <InfoText
-                    title={result.status === GameResult.WIN ? `You won ${result.value}` : `You lost ${result.value}`}
-                    position={textPosition}
-                />
+                <RevealResult {...props} />
             }
         </Container>
     )

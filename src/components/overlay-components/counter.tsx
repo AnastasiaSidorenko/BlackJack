@@ -1,7 +1,6 @@
 import { Container, Graphics, Text } from "@pixi/react";
 import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { SizeProps, ActionTypes, PositionProps } from "../../types";
+import { PositionProps } from "../../types";
 import { TextStyle } from 'pixi.js';
 
 interface CounterProps {
@@ -27,7 +26,6 @@ export const Counter:React.FC<CounterProps & PositionProps> = ({position, second
     useEffect(() => {
         if (!counterValid && onTimeUp) onTimeUp();
         const interval = setInterval(() => {
-            console.log("here", count);
             setCount(prev => prev - 1);
         }, 1000);
 
@@ -41,9 +39,9 @@ export const Counter:React.FC<CounterProps & PositionProps> = ({position, second
     return (
         counterValid
         ?
-        <Container position={position} anchor={0.5}>
-            <Graphics draw={draw} />
-            <Text text={count.toString()} style={
+        <Container position={position} anchor={0.5} sortableChildren>
+            <Graphics zIndex={10} draw={draw} />
+            <Text zIndex={10} text={count.toString()} style={
                 new TextStyle({
                     align: 'center',
                     fontFamily: '"Source Sans Pro", Helvetica, sans-serif',

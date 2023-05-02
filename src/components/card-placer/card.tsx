@@ -1,5 +1,5 @@
 import { Sprite } from '@pixi/react';
-import React, { ForwardedRef, Ref, RefObject } from 'react';
+import React from 'react';
 import { Card as CardType } from '../../types';
 import { PositionProps } from '../../types';
 
@@ -21,7 +21,5 @@ export const Card:React.FC<CardProps & PositionProps> = ({isBack, card, position
         anchor={0.5}
         scale={0.8}
         zIndex={zIndex || 1}
-        // motion={motion}
-        // TODO filters={[blurFilter, matrixFilter]}
     />
 );

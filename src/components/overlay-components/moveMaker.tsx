@@ -1,15 +1,11 @@
 import { Container, Graphics, Text } from "@pixi/react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SizeProps, ActionTypes, PositionProps, GameState } from "../../types";
+import { ActionTypes, GameState, PositionProps } from "../../types";
 import { TextStyle } from 'pixi.js';
-import { Coin } from './coin';
 import { Counter } from "./counter";
 import { DropShadowFilter } from "@pixi/filter-drop-shadow";
-import { update } from "lodash";
 import { InfoText } from './infoText';
-
-const bets = [1, 5, 10, 25, 100, 500];
 
 const selectedFilter = new DropShadowFilter();
 selectedFilter.color = 0xffffff;
@@ -19,16 +15,10 @@ selectedFilter.distance = 3;
 const step = 35;
 export const offset = 70;
 
-const defaultBet = 5;
-
-
-// SizeProps & 
 export const MoveMaker:React.FC<{seconds: number}> = ({seconds}) => {
-    // const balance = useSelector((state: GameState) => state.player.total_balance);
-
-    const [ title, setTitle ] = useState('Make your decision');
-
     const dispatch = useDispatch();
+
+    const balance = useSelector((state: GameState) => state.player.total_balance);
 
     const elementsPositions = [
         {x: -step, y: 0},
@@ -37,12 +27,12 @@ export const MoveMaker:React.FC<{seconds: number}> = ({seconds}) => {
 
     const passMove = () => {
         dispatch({
-            type: ActionTypes.PASS_FURTHER,
+            type: ActionTypes.REVEAL,
         });
     }
 
     const handleTimeUp = () => {
-        passMove();
+        // passMove();
         //TODO pass to another player
     }
 
@@ -56,32 +46,61 @@ export const MoveMaker:React.FC<{seconds: number}> = ({seconds}) => {
         passMove();
     }
 
+    const handleSurrender = () => {
+        dispatch({
+            type: ActionTypes.SURRENDER
+        });
+    }
+
+    const handleDouble = () => {
+        dispatch({
+            type: ActionTypes.DOUBLE
+        });
+    }
+
     // position={{x: width/2, y: height/2}} anchor={0.5}
     return (
-        <Container anchor={0.5} >
-            <InfoText position={{x: 0, y: -offset}} title={title} />
-            <Container anchor={0.5} position={{x: 0, y: 0}}>
+        <Container anchor={0.5} sortableChildren>
+            <InfoText position={{x: 0, y: -offset}} title='Make your decision'/>
+            <Container anchor={0.5} position={{x: 0, y: 0}} sortableChildren>
                 <Button
-                    text="HIT"
+                    text="double"
+                    onClick={handleDouble}
+                    color={0x4d4d4d}
+                    position={{x: -150, y: 0}}
+                    symbol="2X"
+                    fontSize={30}
+                />
+                <Button
+                    text="hit"
                     onClick={handleHit}
                     color={0x3bc043}
                     position={{x: -50, y: 0}}
                     symbol="+"
+                    fontSize={50}
                 />
                 <Button
-                    text="STAND"
+                    text="stand"
                     onClick={handleStand}
                     color={0xb53737}
                     position={{x: 50, y: 0}}
                     symbol="-"
+                    fontSize={50}
+                />
+                <Button
+                    text="SURRENDER"
+                    onClick={handleSurrender}
+                    color={0xf1ee87}
+                    position={{x: 150, y: 0}}
+                    symbol={'尸'}
+                    fontSize={30}
                 />
             </Container>
             <Counter
                 position={{x: 0, y: -offset * 2}}
-                seconds={20}
+                seconds={seconds}
                 onTimeUp={handleTimeUp}
             />
-            {/* */}
             {/*TODO error if balance less than bets */}
         </Container>
     )
@@ -91,10 +110,11 @@ interface ButtonProps {
     onClick: () => void;
     color: number;
     text: string;
-    symbol: string
+    symbol: string;
+    fontSize: number
 }
 
-const Button:React.FC<ButtonProps & PositionProps> = ({onClick, color, text, position, symbol}) => {
+const Button:React.FC<ButtonProps & PositionProps> = ({onClick, color, text, position, symbol, fontSize}) => {
     const draw = useCallback((g: any) => {
         g.clear();
         g.beginFill(color);
@@ -103,18 +123,19 @@ const Button:React.FC<ButtonProps & PositionProps> = ({onClick, color, text, pos
     }, []);
 
     return (
-        <Container pointerdown={onClick} interactive position={position}>
-            <Graphics draw={draw}/>
+        <Container pointerdown={onClick} interactive position={position} sortableChildren>
+            <Graphics draw={draw} zIndex={20}/>
             <Text text={symbol} style={
                 new TextStyle({
                     align: 'center',
                     fontFamily: '"Source Sans Pro", Helvetica, sans-serif',
                     fill: ['#ffffff'], // gradient,
-                    fontSize: 50
+                    fontSize: fontSize
                 })}
                 anchor={0.5}
+                zIndex={20}
             />
-            <Text text={text} style={
+            <Text text={text.toUpperCase()} style={
                 new TextStyle({
                     align: 'center',
                     fontFamily: '"Source Sans Pro", Helvetica, sans-serif',
@@ -122,6 +143,7 @@ const Button:React.FC<ButtonProps & PositionProps> = ({onClick, color, text, pos
                     fontSize: 14
                 })}
                 position={{ x: 0, y: 40}} anchor={0.5}
+                zIndex={20}
             />
         </Container>
     )

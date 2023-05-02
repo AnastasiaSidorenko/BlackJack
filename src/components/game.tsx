@@ -1,5 +1,5 @@
-import { Container, Graphics, SimpleMesh, Sprite, Stage } from "@pixi/react";
-import React, { useCallback, useEffect, useState } from "react";
+import { Container, Graphics, Sprite } from "@pixi/react";
+import React, { useCallback } from "react";
 import { Overlay } from './overlay-components/index';
 import { GameState, GameStatus, SizeProps } from '../types';
 import { useSelector } from "react-redux";
@@ -59,10 +59,10 @@ export const Game:React.FC<SizeProps> = ({ ...props }) => {
         <Container>
             <BackGround {...props }/>
             <Table {...props} />
-            <Overlay {...props}  />
             { ![GameStatus.LOADED, GameStatus.WAITING_BETS].includes(status) &&
                <CardPlacers {...props} />  
             }
+            <Overlay {...props}  />
             <InfoPanel {...props} />
             {/* TODO make balance and bet display*/}
             {/* TODO balance localStorage */}

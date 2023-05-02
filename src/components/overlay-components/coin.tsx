@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
-import { Container, Sprite, withFilters } from '@pixi/react';
-import { Filter, filters } from 'pixi.js';
+import React from 'react';
+import { Sprite } from '@pixi/react';
 import {DropShadowFilter} from '@pixi/filter-drop-shadow';
 import { PositionProps } from '../../types';
 

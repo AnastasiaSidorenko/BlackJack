@@ -1,14 +1,12 @@
 import { Container, Graphics, Text } from "@pixi/react";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SizeProps, ActionTypes, PositionProps, GameState } from "../../types";
 import { TextStyle } from 'pixi.js';
 import { Coin } from './coin';
 import { Counter } from "./counter";
 import { DropShadowFilter } from "@pixi/filter-drop-shadow";
-import { update } from "lodash";
 import { InfoText } from './infoText';
-import { betSelectingSeconds } from '../../index';
 
 const bets = [1, 5, 10, 25, 100, 500];
 
@@ -22,9 +20,8 @@ export const offset = 70;
 
 const defaultBet = 5;
 
-
 // SizeProps & 
-export const BetSelector:React.FC = () => {
+export const BetSelector:React.FC<{seconds:number}> = ({seconds}) => {
     const balance = useSelector((state: GameState) => state.player.total_balance);
 
     const [ title, setTitle ] = useState('Place your bets');
@@ -34,13 +31,11 @@ export const BetSelector:React.FC = () => {
 
     const dispatch = useDispatch();
 
-    const calcResultValue = (bet: number, doubledByTimes: number) => {
-        console.log("bet", bet);
-        return doubledByTimes > 0 ? bet * (doubledByTimes * 2) : bet;
+    const calcResultValue = (selectedBetValue: number, doubledByTimes: number) => {
+        return doubledByTimes > 0 ? selectedBetValue * (doubledByTimes * 2) : selectedBetValue;
     }
 
     const onSelectBetHandler = (betValue: number) => {
-        console.log("onSelectBetHandler");
         if (checkIfBetValid(betValue)) {
             setSelectedBet(betValue);
             resetDoubled();
@@ -48,7 +43,6 @@ export const BetSelector:React.FC = () => {
     }
 
     const handleOnDouble = () => {
-        console.log("handleOnDouble");
         const resValue = calcResultValue(selectedBet, doubled + 1);
         if (checkIfBetValid(selectedBet, doubled + 1)) {
             if (bets.includes(resValue)) {
@@ -60,7 +54,6 @@ export const BetSelector:React.FC = () => {
     }
 
     const handleUndo = () => {
-        console.log("handleUndo");
         setSelectedBet(defaultBet);
         resetDoubled();
     }
@@ -70,13 +63,12 @@ export const BetSelector:React.FC = () => {
     }
 
     const checkIfBetValid = (betV: number, doubledV = doubled) => {
-        console.log("balance", balance);
-        console.log("calcResultValue({bet: bet, doubledByTimes: doubledV}) <= balance;", calcResultValue(betV, doubledV));
-        const isValid =  calcResultValue(betV, doubledV) <= balance;
+        /// const isValid = calcResultValue(betV, doubledV) <= balance;
+        const isValid = false;
         if (isValid) {
             setError('');
         } else {
-            setError('Unsufficient balance');
+            setError('Unsufficient balance for bet');
         }
         return isValid;
     }
@@ -107,12 +99,10 @@ export const BetSelector:React.FC = () => {
     console.log({selectedBet});
     console.log({doubled});
 
-    // position={{x: width/2, y: height/2}} anchor={0.5}
     return (
         <Container anchor={0.5} >
             <InfoText position={{x: 0, y: -offset}} title={title} />
-            {/* <Undo onClick={handleUndo} /> */}
-            {// bets map over
+            {
                 bets.map((betValue, index) => {
                 const isSelected= selectedBet === betValue;
                 const coin = 
@@ -152,11 +142,12 @@ export const BetSelector:React.FC = () => {
             </Container>
             <Counter
                 position={{x: 0, y: offset * 2}}
-                seconds={betSelectingSeconds}
+                seconds={seconds}
                 onTimeUp={handleTimeUp}
                 preTimeUpSeconds={5}
                 onPretimeUp={handleBetsClosing}
             />
+            <InfoText title={error} position={{x: 0, y: offset * 3}} />
             {/* */}
             {/*TODO error if balance less than bets */}
         </Container>
