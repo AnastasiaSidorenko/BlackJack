@@ -8,7 +8,7 @@ const initialState: GameState = {
     availableCardsToDraw: getCardDeck(),
     player: {
         id: 'realPlayer',
-        total_balance: Number(localStorage.getItem(localStorageBalance)) || 500,
+        total_balance: 500,
         total_bet: 0,
         seat: {
             card_points: 0,
