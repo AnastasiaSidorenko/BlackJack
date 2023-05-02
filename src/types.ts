@@ -6,7 +6,6 @@ export enum ActionTypes {
     SURRENDER = "surrender",
     INIT = "INIT",
     DOUBLE = "double",
-    DEALING = "dealing",
     REVEAL = "reveal",
     WAIT_FOR_MOVE = "wait for move",
     RESTART = "restart"
@@ -20,7 +19,6 @@ export type GameAction =
     | { type: ActionTypes.SURRENDER }
     | { type: ActionTypes.INIT }
     | { type: ActionTypes.DOUBLE }
-    | { type: ActionTypes.DEALING }
     | { type: ActionTypes.WAIT_FOR_MOVE }
     | { type: ActionTypes.REVEAL }
     | { type: ActionTypes.RESTART }
@@ -51,6 +49,7 @@ type Player = {
     total_balance: number;
     total_bet: number;
     seat: Seat;
+    is_doubled: boolean;
 };
 
 export type PositionType = {
@@ -79,7 +78,6 @@ export type Result = {
 export interface GameState {
     player: Player;
     availableCardsToDraw: Card_Deck;
-    NPC: Player[] | null;
     status: GameStatus;
     dealer: {
         cards: Card[];

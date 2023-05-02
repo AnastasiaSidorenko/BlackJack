@@ -16,14 +16,8 @@ const step = 35;
 export const offset = 70;
 
 export const MoveMaker:React.FC<{seconds: number}> = ({seconds}) => {
+    const isDoubled = useSelector((state: GameState) => state.player.is_doubled);
     const dispatch = useDispatch();
-
-    const balance = useSelector((state: GameState) => state.player.total_balance);
-
-    const elementsPositions = [
-        {x: -step, y: 0},
-        {x: step, y: 0},
-    ];
 
     const passMove = () => {
         dispatch({
@@ -32,8 +26,7 @@ export const MoveMaker:React.FC<{seconds: number}> = ({seconds}) => {
     }
 
     const handleTimeUp = () => {
-        // passMove();
-        //TODO pass to another player
+        passMove();
     }
 
     const handleHit = () => {
@@ -58,7 +51,8 @@ export const MoveMaker:React.FC<{seconds: number}> = ({seconds}) => {
         });
     }
 
-    // position={{x: width/2, y: height/2}} anchor={0.5}
+    console.log("isDoubled", isDoubled);
+
     return (
         <Container anchor={0.5} sortableChildren>
             <InfoText position={{x: 0, y: -offset}} title='Make your decision'/>
@@ -66,7 +60,7 @@ export const MoveMaker:React.FC<{seconds: number}> = ({seconds}) => {
                 <Button
                     text="double"
                     onClick={handleDouble}
-                    color={0x4d4d4d}
+                    color={isDoubled ? 0xdedede : 0x4d4d4d}
                     position={{x: -150, y: 0}}
                     symbol="2X"
                     fontSize={30}
@@ -90,7 +84,7 @@ export const MoveMaker:React.FC<{seconds: number}> = ({seconds}) => {
                 <Button
                     text="SURRENDER"
                     onClick={handleSurrender}
-                    color={0xf1ee87}
+                    color={0xe5de00}
                     position={{x: 150, y: 0}}
                     symbol={'尸'}
                     fontSize={30}
@@ -120,7 +114,7 @@ const Button:React.FC<ButtonProps & PositionProps> = ({onClick, color, text, pos
         g.beginFill(color);
         g.drawCircle(0, 0, 30);
         g.endFill();
-    }, []);
+    }, [color]);
 
     return (
         <Container pointerdown={onClick} interactive position={position} sortableChildren>

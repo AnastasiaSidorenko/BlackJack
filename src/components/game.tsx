@@ -27,7 +27,7 @@ export const Table:React.FC<SizeProps> = ({ width, height }) => {
         g.moveTo(0, 0);
         g.beginFill(0x555555);
         g.lineTo(0, height / 2);
-        g.bezierCurveTo(0, height * 1.1, width, height * 1.1, width, height / 2);
+        g.bezierCurveTo(0, height * 1.2, width, height * 1.2, width, height / 2);
         g.lineTo(width, 0);
         g.lineTo(0, 0);
         g.endFill();
@@ -39,7 +39,7 @@ export const Table:React.FC<SizeProps> = ({ width, height }) => {
         g.moveTo(tablePadding, 0);
         g.beginFill(0x095525);
         g.lineTo(tablePadding, height / 2);
-        g.bezierCurveTo(tablePadding, height, width - tablePadding, height, width - tablePadding, height / 2);
+        g.bezierCurveTo(tablePadding, height * 1.1, width - tablePadding, height * 1.1, width - tablePadding, height / 2);
         g.lineTo(width - tablePadding, 0);
         g.lineTo(tablePadding, 0);
         g.endFill();
@@ -64,8 +64,6 @@ export const Game:React.FC<SizeProps> = ({ ...props }) => {
             }
             <Overlay {...props}  />
             <InfoPanel {...props} />
-            {/* TODO make balance and bet display*/}
-            {/* TODO balance localStorage */}
         </Container>
   );
 };

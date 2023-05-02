@@ -30,24 +30,38 @@ export const PlayerCardPlacer:React.FC<playerCardPlacerProps & cardDeckPositionP
 
     useEffect(() => {
         if (isCardPositionsValid) {
-            setFinalCoords([getFinalPosition(0), getFinalPosition(1)]);
-            setCardsCurrentPositions([cardDeckPosition, cardDeckPosition]);
+            updateCoords();
         }
     }, [isCardPositionsValid]);
+
+    useEffect(() => {
+        updateCoords();
+    }, [position]);
 
     const getFinalPosition = (idx: number) => {
         return {
             x: position.x + idx * playerCardXOffset,
             y: position.y - idx * playerCardYOffset
         }
-    }
+    };
+
+    const updateCoords = () => {
+        const currentCoords:PositionType[] = [];
+        const finalCoords:PositionType[] = [];
+        cards.forEach((card, idx) => {
+            finalCoords.push(getFinalPosition(idx));
+            currentCoords.push(cardDeckPosition);
+        });
+        setCardsCurrentPositions(currentCoords);
+        setFinalCoords(finalCoords);
+    };
 
     const handleCardBeenAnimated = (idx: number) => {
         setLastAnimatedCard(idx);
         if (idx + 1 === 2) {
             on2CardsAnimationEnd();
         }
-    }
+    };
 
     useEffect(() => {
         if (cards.length > 2 && cards.length > lastCardsQ) {
@@ -69,7 +83,6 @@ export const PlayerCardPlacer:React.FC<playerCardPlacerProps & cardDeckPositionP
         <>
             {isCardPositionsValid && cards.map((card, idx) => {
                 if (cardsCurrentPositions[idx]) {
-                    console.log("idx", idx);
                     return (
                         <AnimatedCard
                             key={`${card.suit}-${card.value}-${idx + 1}`}
@@ -80,6 +93,7 @@ export const PlayerCardPlacer:React.FC<playerCardPlacerProps & cardDeckPositionP
                             finalPosition={finalCoords[idx]}
                             zIndex={idx + 1}
                             startAnimation={idx === lastAnimatedCard + 1}
+                            beenAnimated={lastAnimatedCard >= idx}
                         />
                     );
                 }
@@ -94,16 +108,16 @@ interface AnimatedCardProps {
     startPosition: PositionType,
     finalPosition: PositionType,
     card: CardType,
-    // isStartPositionValid: boolean,
     zIndex: number,
     onAnimationEnd: (idx: number) => void,
-    startAnimation: boolean
+    startAnimation: boolean,
+    beenAnimated: boolean
 };
 
-const AnimatedCard:React.FC<AnimatedCardProps> = ({idx, startPosition, finalPosition, card, zIndex, onAnimationEnd, startAnimation}) => {
+const AnimatedCard:React.FC<AnimatedCardProps> = ({idx, startPosition, finalPosition, card, zIndex, onAnimationEnd, startAnimation, beenAnimated}) => {
     const [CardX, setCardX] = useState<number>(startPosition.x);
     const [CardY, setCardY] = useState<number>(startPosition.y);
-    const [CardXPathCenter, setCardXPathCenter] = useState<number>((startPosition.x + finalPosition.x) / 2);
+    const CardXPathCenter = ((startPosition.x + finalPosition.x) / 2);
     const [isBackSided, setIsBackSided] = useState<boolean>(true);
     const [isCardBeenAnimated, setIsCardBeenAnimated] = useState<boolean>(false);
     let i = 0;
@@ -137,7 +151,7 @@ const AnimatedCard:React.FC<AnimatedCardProps> = ({idx, startPosition, finalPosi
                 key={`${card.suit}-${card.value}-${zIndex}`}
                 card={card}
                 isBack={isBackSided}
-                position={{x: CardX, y: CardY}}
+                position={!beenAnimated ? {x: CardX, y: CardY} : finalPosition}
                 zIndex={zIndex}
                 />
             }

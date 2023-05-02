@@ -19,7 +19,7 @@ export const Card:React.FC<CardProps & PositionProps> = ({isBack, card, position
         position={position}
         roundPixels={true}
         anchor={0.5}
-        scale={0.8}
+        scale={0.7}
         zIndex={zIndex || 1}
     />
 );

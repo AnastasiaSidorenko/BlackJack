@@ -22,15 +22,6 @@ export const CardPlacers:React.FC<SizeProps> = ({width, height}) => {
     let CardDeckPlacerPosition = {x: width - 104, y: 84 };
     const [startDealerCardsAnimation, setStartDealerCardsAnimation] = useState(false)
 
-    /* useEffect(() => {
-        dispatch({
-            type: ActionTypes.PLACE_BET,
-            payload: {
-                value: 5
-            }
-        });
-    }, []); */
-
     useEffect(() => {
         CardDeckPlacerPosition = {x: width - 104, y: 84 };
     }, [width, height]);
@@ -48,14 +39,8 @@ export const CardPlacers:React.FC<SizeProps> = ({width, height}) => {
             dispatch({
                 type: ActionTypes.WAIT_FOR_MOVE
             });
-        }, 3000);
+        }, 1000);
     }
-
-    useEffect(() => {
-        if (player.seat.card_points === 21) {
-            handleGoToNextStep();
-        }
-    }, [player]);
 
     return (
         <Container sortableChildren>
@@ -77,7 +62,7 @@ export const CardPlacers:React.FC<SizeProps> = ({width, height}) => {
                 <PlayerCardPlacer
                     cardDeckPosition={CardDeckPlacerPosition}
                     seat={player.seat}
-                    position={{ x: width / 2, y: height - 180 }}
+                    position={{ x: width / 2, y: height - 150 }}
                     on2CardsAnimationEnd={handlePlayerCardsBeenAnimated}
                 />
             </Container>

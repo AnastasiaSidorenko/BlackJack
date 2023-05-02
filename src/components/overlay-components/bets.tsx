@@ -36,7 +36,7 @@ export const BetSelector:React.FC<{seconds:number}> = ({seconds}) => {
     }
 
     const onSelectBetHandler = (betValue: number) => {
-        if (checkIfBetValid(betValue)) {
+        if (betValue !== selectedBet && checkIfBetValid(betValue, 0)) {
             setSelectedBet(betValue);
             resetDoubled();
         }
@@ -62,9 +62,8 @@ export const BetSelector:React.FC<{seconds:number}> = ({seconds}) => {
         setDoubled(0)
     }
 
-    const checkIfBetValid = (betV: number, doubledV = doubled) => {
-        /// const isValid = calcResultValue(betV, doubledV) <= balance;
-        const isValid = false;
+    const checkIfBetValid = (betV: number, doubledV:number) => {
+        const isValid = calcResultValue(betV, doubledV) <= balance;
         if (isValid) {
             setError('');
         } else {
@@ -96,30 +95,29 @@ export const BetSelector:React.FC<{seconds:number}> = ({seconds}) => {
         {x: step * 5, y: 0},
     ];
 
-    console.log({selectedBet});
-    console.log({doubled});
-
     return (
         <Container anchor={0.5} >
             <InfoText position={{x: 0, y: -offset}} title={title} />
             {
                 bets.map((betValue, index) => {
-                const isSelected= selectedBet === betValue;
-                const coin = 
-                <Coin
-                    bet={betValue}
-                    isSelected={selectedBet === betValue}
-                    onSelect={onSelectBetHandler}
-                    position={coinPositions[index]}
-                />
+                    const isSelected= selectedBet === betValue;
+                    const coin = (
+                        <Coin
+                            key={`${betValue}`}
+                            bet={betValue}
+                            isSelected={selectedBet === betValue}
+                            onSelect={onSelectBetHandler}
+                            position={coinPositions[index]}
+                        />
+                    );
 
-                if (isSelected) {
-                    return (
-                        <Container filters={[selectedFilter]}>
-                            {coin}
-                        </Container>
-                    )
-                }
+                    if (isSelected) {
+                        return (
+                            <Container filters={[selectedFilter]} key={`${betValue}`}>
+                                {coin}
+                            </Container>
+                        )
+                    }
                 return coin;
             })}
             <Container anchor={0.5} position={{x: 0, y: offset}}>
@@ -148,8 +146,6 @@ export const BetSelector:React.FC<{seconds:number}> = ({seconds}) => {
                 onPretimeUp={handleBetsClosing}
             />
             <InfoText title={error} position={{x: 0, y: offset * 3}} />
-            {/* */}
-            {/*TODO error if balance less than bets */}
         </Container>
     )
 }

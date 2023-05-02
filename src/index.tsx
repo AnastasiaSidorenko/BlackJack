@@ -12,7 +12,6 @@ import { StrictMode } from "react";
 import { Game } from './components/game';
 import './index.css';
 interface ContextBridgeProps {
-    // value: Store<GameState, GameAction>
     Context: React.Context<ReactReduxContextValue<any, AnyAction>>;
     children: React.ReactNode;
     render: any
@@ -31,7 +30,6 @@ const ContextBridge:React.FC <ContextBridgeProps> = ({ children, Context, render
 
 const store = createStore(gameReducer, composeWithDevTools());
 
-// your Stage:
 interface StageProps {
     children: React.ReactNode;
     width: number;
@@ -49,23 +47,19 @@ export const Stage:React.FC <StageProps> = ({ children, ...props }) => {
   );
 };
 
-// your App
 function App() {
     const [width, setWidth] = React.useState<number>(0);
     const [height, setHeight] = React.useState<number>(0);
 
     React.useEffect(() => {
-        console.log("window", window.innerWidth);
         window.addEventListener('resize', handleResize);
         handleResize();
     }, []);
 
     const handleResize = () => {
-      console.log("resize");
       setWidth(document.body.clientWidth);
       setHeight(window.innerHeight);
     };
-    /* TODO remake width height params */
 
     return (
       <StrictMode>

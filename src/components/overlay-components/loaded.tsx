@@ -11,8 +11,7 @@ export const Loaded:React.FC<SizeProps> = ({width, height}) => {
     const rectWidth = 200;
     const rectHeight = 100;
 
-    // const isBalanceValid = balance >= 5;
-    const isBalanceValid = balance <= 5;
+    const isBalanceValid = balance >= 5;
 
     const draw = useCallback((g: any) => {
         g.clear();
@@ -41,11 +40,7 @@ export const Loaded:React.FC<SizeProps> = ({width, height}) => {
                         anchor={0.5}
                     />
                 </>
-                : (
-                <>
-                    <InfoText title={"Balance is too low"} position={{x: 0, y: 0}} />
-                    <InfoText title={"Clear local storage"} position={{x: 0, y: 100}} />
-                </>)
+                : <InfoText title={"Balance is too low\nClear local storage"} position={{x: 0, y: 0}} />
             }
         </Container>
     )

@@ -1,5 +1,5 @@
 import { Container, Graphics, Text } from "@pixi/react";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { SizeProps, ActionTypes, GameResult, GameState } from "../../types";
 import { TextStyle } from 'pixi.js';
@@ -8,10 +8,18 @@ export const RevealResult:React.FC<SizeProps> = ({width, height}) => {
     const result = useSelector((state: GameState) => state.result);
     const dispatch = useDispatch();
     const rectWidth = 250;
-    const rectHeight = 100;
+    const rectHeight = 90;
 
     const rectRestartWidth = 150;
-    const rectRestartHeight = 70;
+    const rectRestartHeight = 50;
+
+    const [showResult, setShowResult] = useState(false);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setShowResult(true);
+        }, 1500)
+    }, []);
 
     const draw = useCallback((g: any) => {
         g.clear();
@@ -34,31 +42,29 @@ export const RevealResult:React.FC<SizeProps> = ({width, height}) => {
     }
 
     return (
-        <>
-            <Container anchor={0.5}>
-                <Graphics draw={draw}/>
-                <Text text={result.status === GameResult.WIN ? `You won \n${result.value !== 0 ? result.value : 'your bet (1 to 1)'}` : `You lost \n${result.value}`}
-                    style={
-                    new TextStyle({
-                        align: 'center',
-                        fontFamily: '"Source Sans Pro", Helvetica, sans-serif',
-                        fill: ['#ffffff'], // gradient,
-                    })}
-                    anchor={0.5}
-                />
-            </Container>
-            <Container pointerdown={onRestart} anchor={0.5} interactive position={{ x: 0, y: rectHeight + 20}}>
-                <Graphics draw={drawRestart}/>
-                <Text text={'Restart'}
-                    style={
-                    new TextStyle({
-                        align: 'center',
-                        fontFamily: '"Source Sans Pro", Helvetica, sans-serif',
-                        fill: ['#ffffff'], // gradient
-                    })}
-                    anchor={0.5}
-                />
-            </Container>
-        </>
+        showResult ? (
+            <>
+                <Container anchor={0.5} position={{ x: 0, y: - (rectHeight + 10) }}>
+                    <Graphics draw={draw} />
+                    <Text text={result.status === GameResult.WIN ? `You win \n${result.value !== 0 && result.value}` : `Dealer wins`}
+                        style={new TextStyle({
+                            align: 'center',
+                            fontFamily: '"Source Sans Pro", Helvetica, sans-serif',
+                            fill: ['#ffffff'],
+                        })}
+                        anchor={0.5} />
+                </Container>
+                    <Container pointerdown={onRestart} anchor={0.5} interactive>
+                        <Graphics draw={drawRestart} />
+                        <Text text={'Restart'}
+                            style={new TextStyle({
+                                align: 'center',
+                                fontFamily: '"Source Sans Pro", Helvetica, sans-serif',
+                                fill: ['#ffffff'],
+                            })}
+                            anchor={0.5} />
+                </Container>
+            </>
+        ) : null
     )
 }
