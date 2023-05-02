@@ -12,8 +12,7 @@ selectedFilter.color = 0xffffff;
 selectedFilter.quality = 10;
 selectedFilter.distance = 3;
 
-const step = 35;
-export const offset = 70;
+export const offset = 50;
 
 export const MoveMaker:React.FC<{seconds: number}> = ({seconds}) => {
     const isDoubled = useSelector((state: GameState) => state.player.is_doubled);
@@ -51,11 +50,9 @@ export const MoveMaker:React.FC<{seconds: number}> = ({seconds}) => {
         });
     }
 
-    console.log("isDoubled", isDoubled);
-
     return (
         <Container anchor={0.5} sortableChildren>
-            <InfoText position={{x: 0, y: -offset}} title='Make your decision'/>
+            <InfoText position={{x: 0, y: -offset }} title='Make your decision'/>
             <Container anchor={0.5} position={{x: 0, y: 0}} sortableChildren>
                 <Button
                     text="double"
@@ -95,7 +92,6 @@ export const MoveMaker:React.FC<{seconds: number}> = ({seconds}) => {
                 seconds={seconds}
                 onTimeUp={handleTimeUp}
             />
-            {/*TODO error if balance less than bets */}
         </Container>
     )
 }

@@ -27,6 +27,7 @@ export const CardPlacers:React.FC<SizeProps> = ({width, height}) => {
     }, [width, height]);
 
     const handleDealerCardAnimationEnd = () => {
+        console.log("HERE");
         handleGoToNextStep();
     }
 

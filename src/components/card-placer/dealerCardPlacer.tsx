@@ -19,15 +19,27 @@ export const DealerCardPlacer:React.FC<dealerCardPlacerProps & cardDeckPositionP
 
     const isCardPositionsValid = cardDeckPosition.x > 0;
 
-    const finalCoords = {
+    const getFinalCoords = () => ({
         visible: {x: position.x - 45, y: position.y},
         hidden: {x: position.x + 45, y: position.y}
+    });
+
+    let finalCoords = getFinalCoords();
+
+    const updateCoords = () => {
+        setVisibleCardX(cardDeckPosition.x);
+        setHiddenCardX(cardDeckPosition.x);
+        setVisibleCardY(cardDeckPosition.y);
+        setHiddenCardY(cardDeckPosition.y);
+
+        finalCoords = getFinalCoords();
+        // cardPointsCoords = getCardPointsCoords();
     }
 
-    const cardPointsCoords = {
-        x: position.x,
-        y: position.y - 70
-    }
+
+    useEffect(() => {
+        updateCoords();
+    }, [position, cardDeckPosition]);
 
     const [visibleCardX, setVisibleCardX] = useState<number>(cardDeckPosition.x);
     const [visibleCardY, setVisibleCardY] = useState<number>(cardDeckPosition.y);
@@ -38,20 +50,23 @@ export const DealerCardPlacer:React.FC<dealerCardPlacerProps & cardDeckPositionP
 
     const [hiddenCardX, setHiddenCardX] = useState<number>(cardDeckPosition.x);
     const [hiddenCardY, setHiddenCardY] = useState<number>(cardDeckPosition.y);
+    const [hiddenCardBeenAnimated, setHiddenCardBeenAnimated] = useState(false);
 
     useEffect(() => {
         if (isCardPositionsValid) {
-            setVisibleCardX(cardDeckPosition.x);
-            setHiddenCardX(cardDeckPosition.x);
+            /* setVisibleCardX(cardDeckPosition.x);
+            setHiddenCardX(cardDeckPosition.x); */
+            updateCoords();
         }
     }, [isCardPositionsValid]);
 
     const visibleCardAnimationEnd = isCardPositionsValid && visibleCardX > 0 && visibleCardX <= finalCoords.visible.x;
-    const hiddenCardAnimationEnd = isCardPositionsValid && hiddenCardX > 0 && hiddenCardX <= finalCoords.hidden.x;
+    const hiddenCardAnimationEnd = visibleCardBeenAnimated && isCardPositionsValid && hiddenCardX > 0 && hiddenCardX <= finalCoords.hidden.x;
 
     useEffect(() => {
-        if (hiddenCardAnimationEnd) {
+        if (hiddenCardAnimationEnd && !hiddenCardBeenAnimated) {
             onAnimationEnd();
+            setHiddenCardBeenAnimated(true);
         }
     }, [hiddenCardAnimationEnd]);
 
@@ -90,16 +105,16 @@ export const DealerCardPlacer:React.FC<dealerCardPlacerProps & cardDeckPositionP
         <>
             { cards.length === 2 &&
                 <> 
-                    {visibleCardBeenAnimated && <CardPoints points={card_points} position={cardPointsCoords} />}
+                    {visibleCardBeenAnimated && <CardPoints points={card_points} position={{x: position.x,  y: position.y - 70}} />}
                     <Card zIndex={5}
                         card={cards[0]}
                         isBack={visibleCardBackSided}
-                        position={{x: visibleCardX, y: visibleCardY}}
+                        position={!visibleCardBeenAnimated ? {x: visibleCardX, y: visibleCardY} : finalCoords.visible}
                     />
                     <Card
                         card={cards[1]}
                         isBack={status !== GameStatus.ENDED}
-                        position={{x: hiddenCardX, y: hiddenCardY}}
+                        position={!hiddenCardBeenAnimated ? {x: hiddenCardX, y: hiddenCardY} : finalCoords.hidden}
                     />
                 </>
             }
