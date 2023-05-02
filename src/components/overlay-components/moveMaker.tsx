@@ -12,7 +12,7 @@ selectedFilter.color = 0xffffff;
 selectedFilter.quality = 10;
 selectedFilter.distance = 3;
 
-export const offset = 50;
+export const offset = 60;
 
 export const MoveMaker:React.FC<{seconds: number}> = ({seconds}) => {
     const isDoubled = useSelector((state: GameState) => state.player.is_doubled);

@@ -27,6 +27,7 @@ export const BetSelector:React.FC<{seconds:number}> = ({seconds}) => {
     const [ title, setTitle ] = useState('Place your bets');
     const [ selectedBet, setSelectedBet ] = useState(5);
     const [ doubled, setDoubled ] = useState(0);
+    const [ totalBet, setTotalBet ] = useState(defaultBet);
     const [ error, setError ] = useState('');
 
     const dispatch = useDispatch();
@@ -39,27 +40,33 @@ export const BetSelector:React.FC<{seconds:number}> = ({seconds}) => {
         if (betValue !== selectedBet && checkIfBetValid(betValue, 0)) {
             setSelectedBet(betValue);
             resetDoubled();
+            setTotalBet(betValue);
         }
     }
 
     const handleOnDouble = () => {
-        const resValue = calcResultValue(selectedBet, doubled + 1);
         if (checkIfBetValid(selectedBet, doubled + 1)) {
+            const resValue = calcResultValue(selectedBet, doubled + 1);
             if (bets.includes(resValue)) {
                 setSelectedBet(resValue);
             } else {
                 setDoubled(prev => prev + 1);
             }
+            setTotalBet(resValue);
         }
     }
 
     const handleUndo = () => {
         setSelectedBet(defaultBet);
         resetDoubled();
+        setTotalBet(defaultBet);
+        checkIfBetValid(defaultBet, doubled);
     }
 
     const resetDoubled = () => {
-        setDoubled(0)
+        setDoubled(0);
+        setTotalBet(selectedBet);
+        checkIfBetValid(defaultBet, doubled);
     }
 
     const checkIfBetValid = (betV: number, doubledV:number) => {
@@ -81,7 +88,7 @@ export const BetSelector:React.FC<{seconds:number}> = ({seconds}) => {
         dispatch({
             type: ActionTypes.PLACE_BET,
             payload: {
-                value: calcResultValue(selectedBet, doubled)
+                value: totalBet
             }
         });
     }
@@ -145,7 +152,8 @@ export const BetSelector:React.FC<{seconds:number}> = ({seconds}) => {
                 preTimeUpSeconds={5}
                 onPretimeUp={handleBetsClosing}
             />
-            <InfoText title={error} position={{x: 0, y: offset * 3}} />
+            <InfoText title={`total bet: ${totalBet}`} position={{x: 0, y: offset * 3}} fontSize={20} />
+            <InfoText title={error} position={{x: 0, y: offset * 3.5}} fontSize={20} />
         </Container>
     )
 }

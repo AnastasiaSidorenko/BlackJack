@@ -8,8 +8,8 @@ export const InfoPanel:React.FC<SizeProps> = ({width, height}) => {
     const balance = useSelector((state: GameState) => state.player.total_balance);
     const bet = useSelector((state: GameState) => state.player.total_bet);
 
-    const rectHeight = 100;
-    const rectWidth = 200;
+    const rectHeight = 70;
+    const rectWidth = 180;
 
     const draw = useCallback((g: any) => {
         g.clear();
@@ -28,7 +28,7 @@ export const InfoPanel:React.FC<SizeProps> = ({width, height}) => {
                     fill: ['#07181d'], // gradient,
                     fontSize: 20
                 })}
-                position={{ x:50, y: 25 }}
+                position={{ x:20, y: 10 }}
             />
             <Text text={`Total bet: ${bet}`} style={
                 new TextStyle({
@@ -37,7 +37,7 @@ export const InfoPanel:React.FC<SizeProps> = ({width, height}) => {
                     fill: ['#07181d'], // gradient,
                     fontSize: 20
                 })}
-                position={{ x: 50, y: 60 }}
+                position={{ x: 20, y: 40 }}
             />
         </Container>
     )
