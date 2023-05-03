@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { CardPlacers } from './card-placer';
 import { InfoPanel } from './info-panel/index';
 
-// const { uvs, vertices, indices } = makeSimpleMeshData();
 export const tablePadding = 40;
 
 const BackGround:React.FC<SizeProps> = ({width, height}) => {

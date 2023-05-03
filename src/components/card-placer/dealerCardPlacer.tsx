@@ -118,7 +118,7 @@ export const DealerCardPlacer:React.FC<dealerCardPlacerProps & cardDeckPositionP
                             <Card
                                 zIndex={6 + idx}
                                 card={card}
-                                position={{ x: finalCoords.hidden.x + 20 *( idx + 1), y: finalCoords.hidden.y + 20 *( idx + 1)}}
+                                position={{ x: finalCoords.hidden.x + 20 *( idx + 1), y: finalCoords.hidden.y + 25 *( idx + 1)}}
                         />
                     ))}
                 </>
