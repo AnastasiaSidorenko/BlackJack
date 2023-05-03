@@ -13,17 +13,6 @@ import { Game } from '../game';
  
 export const Overlay:React.FC<SizeProps> = ({...props}) => {
     const status = useSelector((state: GameState) => state.status);
-    const textPosition={x: 0, y: -offset};
-
-    const [showBetsClosedInfo, setShowBetsClosedInfo] = useState(true);
-
-    useEffect(() => {
-        if (status === GameStatus.STARTED) {
-            setTimeout(() => {
-                setShowBetsClosedInfo(false);
-            }, 500);
-        }
-    }, [status]);
 
     return (
         <Container position={{x: props.width/2, y: props.height/2}} anchor={0.5}>
@@ -32,11 +21,6 @@ export const Overlay:React.FC<SizeProps> = ({...props}) => {
             }
             { status === GameStatus.WAITING_BETS && 
                 <BetSelector seconds={15} />
-            }
-            { status === GameStatus.STARTED &&
-                <>
-                    {showBetsClosedInfo && <InfoText title={'bets accepted'} position={textPosition} />}
-                </>
             }
             { status === GameStatus.WAITING && 
                 <MoveMaker seconds={20} />
