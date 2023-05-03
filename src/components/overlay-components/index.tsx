@@ -31,7 +31,7 @@ export const Overlay:React.FC<SizeProps> = ({...props}) => {
                 <Loaded {...props}/>
             }
             { status === GameStatus.WAITING_BETS && 
-                <BetSelector seconds={15} />
+                <BetSelector seconds={5} />
             }
             { status === GameStatus.STARTED &&
                 <>

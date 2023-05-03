@@ -35,7 +35,6 @@ export const DealerCardPlacer:React.FC<dealerCardPlacerProps & cardDeckPositionP
         finalCoords = getFinalCoords();
     }
 
-
     useEffect(() => {
         updateCoords();
     }, [position, cardDeckPosition]);
@@ -100,19 +99,28 @@ export const DealerCardPlacer:React.FC<dealerCardPlacerProps & cardDeckPositionP
 
     return (
         <>
-            { cards.length === 2 &&
+            { cards.length >= 2 &&
                 <> 
                     {visibleCardBeenAnimated && <CardPoints points={card_points} position={{x: position.x,  y: position.y - 70}} />}
-                    <Card zIndex={5}
+                    <Card
+                        zIndex={5}
                         card={cards[0]}
                         isBack={visibleCardBackSided}
                         position={!visibleCardBeenAnimated ? {x: visibleCardX, y: visibleCardY} : finalCoords.visible}
                     />
                     <Card
+                        zIndex={5}
                         card={cards[1]}
                         isBack={status !== GameStatus.ENDED}
                         position={!hiddenCardBeenAnimated ? {x: hiddenCardX, y: hiddenCardY} : finalCoords.hidden}
                     />
+                    {cards.slice(2, cards.length - 1).map((card, idx) => (
+                            <Card
+                                zIndex={6 + idx}
+                                card={card}
+                                position={{ x: finalCoords.hidden.x + 20 *( idx + 1), y: finalCoords.hidden.y + 20 *( idx + 1)}}
+                        />
+                    ))}
                 </>
             }
         </>

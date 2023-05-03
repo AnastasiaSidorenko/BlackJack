@@ -153,6 +153,12 @@ export function getStateWithNewCard(state:GameState, doubleBet:boolean = false) 
 export function getRevealedCardsState(state: GameState) {
     const playerC = [...state.player.seat.cards];
     const dealerC = [...state.dealer.cards];
+    let availableCards = [...state.availableCardsToDraw];
+
+    while(calcPoints(dealerC) < 17) {
+        dealerC.push(availableCards.pop() as Card);
+    };
+
     const result = calcGameOutcome(playerC, dealerC, state.player.total_bet);
     const newBalance = state.player.total_balance + result.value;
     localStorage.setItem(localStorageBalance, newBalance.toString());
@@ -164,7 +170,8 @@ export function getRevealedCardsState(state: GameState) {
             },
             dealer: {
                 ...state.dealer,
-                card_points: calcPoints(state.dealer.cards)
+                card_points: calcPoints(dealerC),
+                cards: dealerC
             },
             status: GameStatus.ENDED,
             result: result

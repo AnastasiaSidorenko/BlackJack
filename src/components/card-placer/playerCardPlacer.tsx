@@ -78,7 +78,6 @@ export const PlayerCardPlacer:React.FC<playerCardPlacerProps & cardDeckPositionP
         setLastCardsQ(cards.length);
     }, [cards.length]);
 
-    // <Container pointerdown={onClick} position={{x: width/2, y: height/2}} anchor={0.5} interactive>
     return (
         <>
             {isCardPositionsValid && cards.map((card, idx) => {
@@ -122,6 +121,8 @@ const AnimatedCard:React.FC<AnimatedCardProps> = ({idx, startPosition, finalPosi
     const [isCardBeenAnimated, setIsCardBeenAnimated] = useState<boolean>(false);
     let i = 0;
 
+    const yCoef = startPosition.x < 700 ? 1.5 : 0.8;
+
     useTick((delta) => {
         if (startAnimation && !isCardBeenAnimated && CardX && CardY) {
             i += deltaCoefficient * delta;
@@ -132,7 +133,7 @@ const AnimatedCard:React.FC<AnimatedCardProps> = ({idx, startPosition, finalPosi
                     setCardX(prev => prev! - i);
                 }
                 if (YHasntReachedDes) {
-                    setCardY(prev => prev! + i * 0.7);
+                    setCardY(prev => prev! + i * yCoef);
                 }
                 if (CardX < CardXPathCenter!) {
                     setIsBackSided(false);

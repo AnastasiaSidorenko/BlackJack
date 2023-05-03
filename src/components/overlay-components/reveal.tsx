@@ -6,6 +6,7 @@ import { TextStyle } from 'pixi.js';
 
 export const RevealResult:React.FC<SizeProps> = ({width, height}) => {
     const result = useSelector((state: GameState) => state.result);
+    const dealer = useSelector((state: GameState) => state.dealer);
     const dispatch = useDispatch();
     const rectWidth = 250;
     const rectHeight = 90;
@@ -16,9 +17,10 @@ export const RevealResult:React.FC<SizeProps> = ({width, height}) => {
     const [showResult, setShowResult] = useState(false);
 
     useEffect(() => {
+        const dealerHasExtraCards = dealer.cards.length > 2;
         setTimeout(() => {
             setShowResult(true);
-        }, 1500)
+        }, dealerHasExtraCards ? 2000 : 1000);
     }, []);
 
     const draw = useCallback((g: any) => {

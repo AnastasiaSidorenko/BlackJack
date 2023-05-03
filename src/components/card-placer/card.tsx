@@ -8,7 +8,6 @@ interface CardProps {
     isBack?: boolean;
     animationDelay?: number;
     zIndex?: number;
-   //  motion: {x: number, y: number, rotation: number}
 }
 
 const path = '../assets/Cards/';

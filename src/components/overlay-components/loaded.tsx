@@ -40,7 +40,7 @@ export const Loaded:React.FC<SizeProps> = ({width, height}) => {
                         anchor={0.5}
                     />
                 </>
-                : <InfoText title={"Balance is too low\nClear local storage"} position={{x: 0, y: 0}} />
+                : <InfoText title={"Balance is too low\nReload page"} position={{x: 0, y: 0}} />
             }
         </Container>
     )
