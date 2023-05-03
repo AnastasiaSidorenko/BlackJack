@@ -21,7 +21,7 @@ export const Overlay:React.FC<SizeProps> = ({...props}) => {
         if (status === GameStatus.STARTED) {
             setTimeout(() => {
                 setShowBetsClosedInfo(false);
-            }, 1000);
+            }, 500);
         }
     }, [status]);
 
@@ -35,7 +35,7 @@ export const Overlay:React.FC<SizeProps> = ({...props}) => {
             }
             { status === GameStatus.STARTED &&
                 <>
-                    {<InfoText title={showBetsClosedInfo ? 'bets accepted' : 'dealing'} position={textPosition} />}
+                    {showBetsClosedInfo && <InfoText title={'bets accepted'} position={textPosition} />}
                 </>
             }
             { status === GameStatus.WAITING && 
