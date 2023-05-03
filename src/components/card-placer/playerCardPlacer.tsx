@@ -121,8 +121,6 @@ const AnimatedCard:React.FC<AnimatedCardProps> = ({idx, startPosition, finalPosi
     const [isCardBeenAnimated, setIsCardBeenAnimated] = useState<boolean>(false);
     let i = 0;
 
-    const yCoef = finalPosition.x < 900 ? 1.2 : 0.7;
-
     useTick((delta) => {
         if (startAnimation && !isCardBeenAnimated && CardX && CardY) {
             i += deltaCoefficient * delta;
@@ -133,7 +131,7 @@ const AnimatedCard:React.FC<AnimatedCardProps> = ({idx, startPosition, finalPosi
                     setCardX(prev => prev! - i);
                 }
                 if (YHasntReachedDes) {
-                    setCardY(prev => prev! + i * yCoef);
+                    setCardY(prev => prev! + i * 0.7);
                 }
                 if (CardX < CardXPathCenter!) {
                     setIsBackSided(false);
