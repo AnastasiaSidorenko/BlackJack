@@ -64,20 +64,20 @@ export function calcGameOutcome(player: Card[], dealer: Card[], bet:number):Resu
     }
     if (isBlackJack(dealer)) {
         if (isBlackJack(player)) {
-            return getResult(bet, GameResult.WIN);
+            return getResult(bet * 2, GameResult.WIN);
         } else {
             return getResult(0, GameResult.DEFEAT);
         }
     }
     if (isBlackJack(player)) {
-        return getResult(bet * 1.5, GameResult.WIN);
+        return getResult(bet * 3, GameResult.WIN);
     }
     // calculating points of player and dealer
     const playerPoints = calcPoints(player);
     const dealerPoints = calcPoints(dealer);
 
     if (playerPoints >= dealerPoints) {
-        return getResult(bet, GameResult.WIN);
+        return getResult(bet * 2, GameResult.WIN);
     } else {
         return getResult(0, GameResult.DEFEAT);
     }

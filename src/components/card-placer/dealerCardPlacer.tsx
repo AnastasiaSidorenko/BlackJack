@@ -20,8 +20,8 @@ export const DealerCardPlacer:React.FC<dealerCardPlacerProps & cardDeckPositionP
     const isCardPositionsValid = cardDeckPosition.x > 0;
 
     const getFinalCoords = () => ({
-        visible: {x: position.x - 45, y: position.y},
-        hidden: {x: position.x + 45, y: position.y}
+        visible: {x: position.x - 40, y: position.y},
+        hidden: {x: position.x + 40, y: position.y}
     });
 
     let finalCoords = getFinalCoords();
@@ -33,7 +33,6 @@ export const DealerCardPlacer:React.FC<dealerCardPlacerProps & cardDeckPositionP
         setHiddenCardY(cardDeckPosition.y);
 
         finalCoords = getFinalCoords();
-        // cardPointsCoords = getCardPointsCoords();
     }
 
 
@@ -54,8 +53,6 @@ export const DealerCardPlacer:React.FC<dealerCardPlacerProps & cardDeckPositionP
 
     useEffect(() => {
         if (isCardPositionsValid) {
-            /* setVisibleCardX(cardDeckPosition.x);
-            setHiddenCardX(cardDeckPosition.x); */
             updateCoords();
         }
     }, [isCardPositionsValid]);

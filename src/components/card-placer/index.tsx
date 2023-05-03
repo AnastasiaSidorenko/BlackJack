@@ -19,11 +19,13 @@ export const CardPlacers:React.FC<SizeProps> = ({width, height}) => {
     const player = useSelector((state: GameState) => state.player);
 
     const dispatch = useDispatch();
-    let CardDeckPlacerPosition = {x: width - 104, y: 84 };
-    const [startDealerCardsAnimation, setStartDealerCardsAnimation] = useState(false)
+
+    const getCardDeckPlacerPosition = () => ({x: width - 80, y: 60 });
+    const [startDealerCardsAnimation, setStartDealerCardsAnimation] = useState(false);
+    let CardDeckPlacerPosition = getCardDeckPlacerPosition();
 
     useEffect(() => {
-        CardDeckPlacerPosition = {x: width - 104, y: 84 };
+        CardDeckPlacerPosition = getCardDeckPlacerPosition();
     }, [width, height]);
 
     const handleDealerCardAnimationEnd = () => {
